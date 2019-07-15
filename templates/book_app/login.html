@@ -1,0 +1,18 @@
+{% extends "book_app/base.html" %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% block templatecss %}<link href="{% static 'css/login.css' %}" rel="stylesheet" />{% endblock %}
+{% block content %}
+    <br>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="login-container">
+        {{ form.as_p }}
+        <input name="login_button" type="Submit" class="btn btn-success btn-btn" value="Log in" />
+      </div>
+      <div class="button-container">
+          <span class="psw">Not a User?     <a href="{% url 'book_app:register' %}">Sign Up Here</a></span>
+      </div>
+    </form>
+{% endblock %}
+

@@ -1,0 +1,39 @@
+
+.imageframe {
+	height: 3vw;
+	width: 3vw;
+	border-radius: 50%;
+	margin-left: 2vw;
+}
+
+.center {
+	margin-left: 27.5vw;
+	height: 60vh;
+	width: 30vw;
+}
+
+.profile-center {
+	height: 60vh;
+	width: 30vw;
+}
+
+@media only screen and (max-width: 600px) {
+	.imageframe {
+		height: 8vw;
+		width: 8vw;
+		border-radius: 50%;
+	}	
+
+	.center {
+		margin-left: 7.5vw;
+		height: 60vh;
+		width: 70vw;
+	}
+
+	.profile-center {
+		margin-left: 7.5vw;
+		height: 60vh;
+		width: 70vw;
+	}
+
+}

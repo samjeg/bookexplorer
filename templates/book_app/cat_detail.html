@@ -1,0 +1,61 @@
+{% extends "cat_app/base_sidebar.html" %}
+{% load static %}
+{% block title %}Cat Topic{% endblock %}
+{% block templatecss %}<link href="{% static 'css/cat_topic.css' %}" rel="stylesheet" />{% endblock %}
+{% block imagenav %}<img class="imageframe" src="../../../media/{{ profile_detail.picture }}" alt="{{ profile_detail.picture }}">{% endblock %}
+{% if user.is_authenticated %}
+{% block profile_nav %}
+  <li class="nav-item">
+    <a name="profile_nav" class="nav-link" href="{% url 'cat_app:profile_detail' pk=profile_detail.pk %}">Profile</a>
+  </li>
+{% endblock %}
+{% endif %}
+{% block sidebar %}
+    <div class="text-light bg-dark border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading">
+            <h1 class="small-font">Name:</h1>
+            <h1 class="small-font">{{ cat_detail.cat_name }}<h1>
+            <br>
+            <h3 class="small-font">Owner:</h3>
+            <h3 class="small-font">{{ cat_detail.owner.user.username}}</h3>
+            <br>
+            <h3 class="small-font">Story:</h3>
+            <h3 class="small-font">{{ cat_detail.story }}</h3>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <br>
+    <img class="center" src="../../../media/{{ cat_detail.cat_picture }}"/>
+    <div class="cat-comment-container">
+      <ul class="cat-comment-list">
+        {% for comment in cat_detail.comments.all %}
+        <li class="cat-comment-list-item">
+          <div class="row">
+            <div class="col-2" >
+              <img class="comment-image" src="../../../media/{{ comment.comment_picture_path }}"  alt="empty">
+            </div>
+            <div class="col-10">
+              <div class="row">
+                <div class="col">
+                  <b>{{ comment.user.username }}</b>
+                </div>
+                <div class="w-100"></div>
+                <div class="col">
+                  <p>{{ comment.comment }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+        </li>
+        {% endfor %}
+      </ul>
+    <form method="POST">
+      {% csrf_token %}
+        {{ form.as_p }}
+        <button name="cat_comment_submit_btn" type="submit" class="btn btn-success btn-btn">Post</button>
+    </form>
+    </div>
+    <br>
+{% endblock %}

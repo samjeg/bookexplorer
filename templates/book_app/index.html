@@ -1,0 +1,10 @@
+{% extends "book_app/base.html" %}
+{% load static %}
+{% block title %}Home Page{% endblock %}
+{% block templatecss %}<link href="{% static 'css/style.css' %}" rel="stylesheet" />{% endblock %}
+
+{% block content %}
+  <div class="jumbotron">
+    <h1>Please add your book data</h1>
+  </div>
+{% endblock %}

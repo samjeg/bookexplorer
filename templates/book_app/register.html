@@ -1,0 +1,18 @@
+{% extends "book_app/base.html" %}
+{% load static %}
+{% block title %}Profile Form{% endblock %}
+{% block templatecss %}<link href="{% static 'css/register.css' %}" rel="stylesheet" />{% endblock %}
+{% block content %}
+   <br>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="register-container">
+        {{ form.as_p }}
+        <button name="reg_submit_btn" type="submit" class="btn btn-primary btn-btn">Register</button>
+      </div>
+      <div class="button-container">
+          <span class="psw">Already a User?     <a href="{% url 'book_app:login' %}">Login Here</a></span>
+      </div>
+    </form>
+    <br>
+{% endblock %}
