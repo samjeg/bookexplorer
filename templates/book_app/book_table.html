@@ -1,0 +1,29 @@
+{% extends "book_app/base.html" %}
+{% load static %}
+{% block title %}Home Page{% endblock %}
+{% block templatecss %}<link href="{% static 'css/book_table.css' %}" rel="stylesheet" />{% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Published</th>
+        <th>ID</th>
+        <th>Publisher</th>
+      </tr>
+      {% if book_data %}
+        {% for book in book_data %}
+          <tr>
+            <td>{{ book.book_title }}</td>
+            <td>{{ book.book_author }}</td>
+            <td>{{ book.date_published }}</td>
+            <td>{{ book.book_ID }}</td>
+            <td>{{ book.book_publisher }}</td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+    </table>
+  {% endif %}
+{% endblock %}

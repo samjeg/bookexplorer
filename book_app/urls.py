@@ -13,5 +13,6 @@ urlpatterns = [
     url(r"^logout/$", auth_views.LogoutView.as_view(
     		template_name="book_app/index.html"
     	), name="logout"),
-    url(r'^register/$', views.Register.as_view(), name='register')
+    url(r'^register/$', views.Register.as_view(), name='register'),
+    url(r'^book_table/$', views.BookTableView.as_view(), name='book_table')
 ]

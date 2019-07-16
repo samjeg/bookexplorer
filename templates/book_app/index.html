@@ -4,7 +4,15 @@
 {% block templatecss %}<link href="{% static 'css/style.css' %}" rel="stylesheet" />{% endblock %}
 
 {% block content %}
-  <div class="jumbotron">
-    <h1>Please add your book data</h1>
-  </div>
+  {% if user.is_authenticated %}
+    <div class="jumbotron">
+      <h1>Click here to go to upload page</h1>
+      <a class="btn btn-primary" href="#">Upload Page</a>
+    </div>
+  {% else %}
+     <div class="jumbotron">
+      <h1>Please Regiter</h1>
+      <a class="btn btn-primary" href="{% url 'book_app:register' %}">Register Page</a>
+    </div>
+  {% endif %}
 {% endblock %}
