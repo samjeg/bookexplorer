@@ -40,14 +40,10 @@ class BookTableView(TemplateView):
 	def readBookCSV(self):
 		books = []
 		curr_path = os.path.dirname(__file__)
-		print("Current Path %s" %curr_path)
 		new_path = os.path.join(curr_path, '..\\static\\csv_files\\books1.csv')
-		print("New Path %s" %new_path)
 		with open(new_path, 'r') as csv_file:
-			print("Hello!!!!!")
 			books_reader = csv.reader(csv_file, delimiter=str(u',').encode('utf-8'), quotechar=str(u'|').encode('utf-8'))
 			for row in books_reader:
-				print("Row %s"%row)
 				book = {
 					"book_title": row[0], 
 					"book_author": row[1], 
@@ -60,4 +56,18 @@ class BookTableView(TemplateView):
 
 		return books
 
+class UploadBookDataView(CreateView):
+	model = models.BookData
+	form_class = forms.BookDataForm
+	template_name = "book_app/create_book_data.html"
+	success_url = reverse_lazy("index")
+
+	def get_context_data(self, **kwargs):
+		context = super(UploadBookDataView, self).get_context_data(**kwargs)
+		user = self.request.user
+		form = self.get_form()
+		if user.is_authenticated:
+			form.initial['user'] = user.id
+			context['book_form'] = form
+		return context
 

@@ -14,5 +14,6 @@ urlpatterns = [
     		template_name="book_app/index.html"
     	), name="logout"),
     url(r'^register/$', views.Register.as_view(), name='register'),
-    url(r'^book_table/$', views.BookTableView.as_view(), name='book_table')
+    url(r'^book_table/$', views.BookTableView.as_view(), name='book_table'),
+    url(r'^upload/$', views.UploadBookDataView.as_view(), name='upload')
 ]

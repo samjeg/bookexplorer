@@ -1,0 +1,18 @@
+{% extends "book_app/base.html" %}
+{% load static %}
+{% block title %}Book Data Form{% endblock %}
+{% block templatecss %}<link href="{% static 'css/profile.css' %}" rel="stylesheet" />{% endblock %}
+{% if user.is_authenticated %}
+{% endif %}
+
+{% block content %}
+    <br>
+    <form enctype="multipart/form-data" method="POST">
+      {% csrf_token %}
+      <div class="register-container">
+        {{ book_form.as_p }}
+        <button name="book_submit_btn" type="submit" class="btn btn-primary btn-btn">Submit</button>
+      </div>
+    </form>
+    <br>
+{% endblock %}
