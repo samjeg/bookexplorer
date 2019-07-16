@@ -21,9 +21,8 @@ class UserCreateForm(UserCreationForm):
 class BookDataForm(forms.ModelForm):
 	user = forms.ModelChoiceField(widget = forms.HiddenInput(), queryset=User.objects.all())
 	CSVName = forms.CharField()
-	CSVURL = forms.URLField()
 	upload = forms.FileField()
 
 	class Meta:
-		fields = ("user", "CSVName", "CSVURL", "upload")
+		fields = ("user", "CSVName", "upload")
 		model = BookData

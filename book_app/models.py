@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 class BookData(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, default=1)
 	CSVName = models.CharField(max_length=25, unique=True)
-	CSVURL = models.URLField()
 	upload = models.FileField(null=True, blank=True)
 
 	def __str__(self):
