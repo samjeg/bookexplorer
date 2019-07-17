@@ -123,37 +123,12 @@ class UploadBookDataView(FormView):
 			return self.form_invalid(form)
 
 	def form_valid(self, form):
-		counter1 = 0
 		id_is_unique = True
-		self.id_is_unique = True
-		csv_file = None
-		book_id = "Not instance"
 		book_form = self.get_form()
 		if book_form.is_valid():
 			csv_file = book_form.cleaned_data.get('upload')
 			csv_file2 = book_form.cleaned_data.get('upload')
-		if csv_file:
-			books_reader = csv.reader(csv_file, delimiter=str(u',').encode('utf-8'), quotechar=str(u'|').encode('utf-8'))
-			
-			# br_length = sum(1 for line in books_reader)
-			if books_reader:
-				for row1 in books_reader:
-					counter1 = counter1 + 1
-					print("counter1: %s"%counter1)
-					# print("Row1: %s %s"%(row1[0], row1[3]))
-					books_reader2 = csv.reader(csv_file2, delimiter=str(u',').encode('utf-8'), quotechar=str(u'|').encode('utf-8'))
-					counter2 = 0
-					for row2 in books_reader2:
-						counter2 = counter2 + 1
-						print("counter2: %s"%counter2)
-						if counter1 != counter2:
-							print("Row1 %s Row2 %s"%(row1[3], row2[3]))
-							if row1[3] == row2[3]:
-								id_is_unique = False
-								self.id_is_unique = False
-								break
-					if not id_is_unique:
-						break
+			id_is_unique = self.validate_book_id(csv_file, csv_file2)
 					
 		
 		print("ID Validation %s"%(id_is_unique))			
@@ -169,6 +144,35 @@ class UploadBookDataView(FormView):
 		if id_is_unique:
 			return super(UploadBookDataView, self).form_valid(form)
 		else:
-			return super(UploadBookDataView, self).form_invalid(form)			
+			return super(UploadBookDataView, self).form_invalid(form)
+
+	def validate_book_id(self, csv_file, csv_file2):
+		counter1 = 0
+		id_is_unique = True
+		self.id_is_unique = True
+		if csv_file:
+			books_reader = csv.reader(csv_file, delimiter=str(u',').encode('utf-8'), quotechar=str(u'|').encode('utf-8'))
+			
+			if books_reader:
+				for row1 in books_reader:
+					counter1 = counter1 + 1
+					print("counter1: %s"%counter1)
+					# print("Row1: %s %s"%(row1[0], row1[3]))
+					if csv_file2:
+						books_reader2 = csv.reader(csv_file2, delimiter=str(u',').encode('utf-8'), quotechar=str(u'|').encode('utf-8'))
+						counter2 = 0
+						for row2 in books_reader2:
+							counter2 = counter2 + 1
+							print("counter2: %s"%counter2)
+							if counter1 != counter2:
+								print("Row1 %s Row2 %s"%(row1[3], row2[3]))
+								if row1[3] == row2[3]:
+									id_is_unique = False
+									self.id_is_unique = False
+									return id_is_unique
+					
+			
+		return id_is_unique
+
 
 
