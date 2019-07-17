@@ -14,5 +14,10 @@
         <button name="book_submit_btn" type="submit" class="btn btn-primary btn-btn">Submit</button>
       </div>
     </form>
+    {% if id_is_not_int %}
+ 		<div class="error_message">
+ 			<h3>The book_id field in the csv fie must contain all ints</h3>
+ 		</div> 
+    {% endif %}
     <br>
 {% endblock %}

@@ -17,6 +17,12 @@
 	width: 30vw;
 }
 
+.error_message {
+	height: 20vh;
+	width: 20vw;
+	border: 1px solid #000;
+}
+
 @media only screen and (max-width: 600px) {
 	.imageframe {
 		height: 8vw;

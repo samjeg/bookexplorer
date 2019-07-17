@@ -34,11 +34,19 @@
 
 .cat-list-item {
 	margin-top: 10vh;
-	height: 45vh;
+	height: 15vh;
 	width: 60vw;
-	border: solid #0066FF;
-	border-width: 2px ;
+	background-color: #A7E7FF;
+	/*border: solid #0066FF;*/
+	/*border-width: 2px ;*/
 	/*overflow: hidden;*/
+}
+
+.csv_name {
+	margin-left: 1vw;
+	margin-top: 1vh;
+	height: 4vh;
+	width: 60vw;
 }
 
 .cat-list-button {
@@ -63,6 +71,7 @@
 
 
 .cat-list-item-button {
+	margin-top: 5vh;
 	width: 30vw;
 }
 

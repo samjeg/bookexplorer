@@ -1,0 +1,27 @@
+{% extends "book_app/base.html" %}
+{% load static %}
+{% block title %}Book CSV List{% endblock %}
+{% block templatecss %}<link href="{% static 'css/cat_list.css' %}" rel="stylesheet">{% endblock %}
+
+{% block content %}
+    <div>
+    <a type="submit" class="btn btn-primary cat-list-button"  href="{% url 'book_app:upload' %}">Add Cat</a>
+    </div>
+    <!-- </div> -->
+    <div class="cat-list-container">
+      <ul class="my-4 cat-list-list">
+        {% for csv in book_csv_list %}
+        <li>
+          <div class="cat-list-item">
+            <div class="csv_name">
+              <h3>{{ csv.CSVName }}</h3>
+            </div>
+            <a name="book_item_select" class="btn btn-primary cat-list-item-button" href="{% url 'book_app:book_table' pk=csv.pk %}">Go to Book Table</a> 
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+{% endblock %}
+
+
