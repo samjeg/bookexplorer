@@ -44,6 +44,7 @@ class BookTableView(DetailView):
 		user = self.request.user
 		book_obj = self.get_object()
 		if user.is_authenticated:
+			context['file_name'] = book_obj.upload.name
 			book_data = self.readBookCSV(book_obj.upload)
 			context['book_data'] = book_data
 		return context
@@ -83,23 +84,9 @@ class UploadBookDataView(FormView):
 	form_class = forms.BookDataForm
 	template_name = "book_app/create_book_data.html"
 	
-	# def get_success_url(self):
-	# 	return reverse_lazy('book_app:book_table', kwargs={'pk': self.object.pk})
+	def get_success_url(self):
+		return reverse_lazy('book_app:book_table', kwargs={'pk': self.object.pk})
 
-	def get_success_url(self, **kwargs): 
-	
-					# try:
-					# 	book_id = int(row[3])
-					# except:
-					# 	book_id = "Not instance"
-					# if isinstance(book_id, (int)):
-					# 	id_is_not_int = False
-					# else:
-					# 	id_is_not_int = True
-					# print("Is int: %s"%isinstance(book_id, (int)))
-			
-		
-		return reverse_lazy("index")
 
 	def get_context_data(self, **kwargs):
 		context = super(UploadBookDataView, self).get_context_data(**kwargs)
@@ -151,6 +138,7 @@ class UploadBookDataView(FormView):
 			upload = csv_file
 		)
 
+		self.object = new_book_data
 		new_book_data.save()
 		if id_is_unique:
 			return super(UploadBookDataView, self).form_valid(form)
