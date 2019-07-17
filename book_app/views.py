@@ -131,22 +131,15 @@ class UploadBookDataView(FormView):
 			csv_file = book_form.cleaned_data.get('upload')
 			csv_file2 = book_form.cleaned_data.get('upload')
 			id_is_unique = self.validate_book_id(csv_file, csv_file2)
-			# print("File name before: %s"%(csv_file.name))
 			new_uuid = uuid.uuid4().hex
 			uuid_reduced = new_uuid[:8]
 			str_len = len(csv_file.name)
 			new_len = str_len - 4
-			# print("New Len: %s"%new_len)
 			file_name = csv_file.name[:new_len]
-			# file_name = csv_file.name[2:]
-			# file_name3 = csv_file.name[1:4]
-
-			# print("File name: %s"%(file_name))
 			unique_name = '%s%s%s'%(file_name, uuid_reduced, ".csv")
 
 			csv_file.name = unique_name
-
-			print("Unique Name: %s csv %s"%(unique_name, csv_file.name))
+			bucket_url =  'https://%s.s3.%s.amazonaws.com/%s/'%(settings.AWS_STORAGE_BUCKET_NAME, settings.AWS_REGION_HOST, unique_name)
 					
 		
 		print("ID Validation %s"%(id_is_unique))			
@@ -154,6 +147,7 @@ class UploadBookDataView(FormView):
 		new_book_data = models.BookData(
 			user = form.cleaned_data['user'],
 			CSVName = unique_name,
+			CSVURL = bucket_url,
 			upload = csv_file
 		)
 

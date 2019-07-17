@@ -5,6 +5,7 @@ from django import forms
 from .models import BookData
 
 class UserCreateForm(UserCreationForm):
+	username = forms.EmailField()
 
 	class Meta:
 		fields = ("username", "password1", "password2")
