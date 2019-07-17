@@ -7,6 +7,7 @@ import csv
 import tempfile
 import urllib
 import requests
+import uuid
 from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import (
@@ -125,22 +126,38 @@ class UploadBookDataView(FormView):
 	def form_valid(self, form):
 		id_is_unique = True
 		book_form = self.get_form()
+		unique_name = "no_name"
 		if book_form.is_valid():
 			csv_file = book_form.cleaned_data.get('upload')
 			csv_file2 = book_form.cleaned_data.get('upload')
 			id_is_unique = self.validate_book_id(csv_file, csv_file2)
+			# print("File name before: %s"%(csv_file.name))
+			new_uuid = uuid.uuid4().hex
+			uuid_reduced = new_uuid[:8]
+			str_len = len(csv_file.name)
+			new_len = str_len - 4
+			# print("New Len: %s"%new_len)
+			file_name = csv_file.name[:new_len]
+			# file_name = csv_file.name[2:]
+			# file_name3 = csv_file.name[1:4]
+
+			# print("File name: %s"%(file_name))
+			unique_name = '%s%s%s'%(file_name, uuid_reduced, ".csv")
+
+			csv_file.name = unique_name
+
+			print("Unique Name: %s csv %s"%(unique_name, csv_file.name))
 					
 		
 		print("ID Validation %s"%(id_is_unique))			
 		
-		# new_comment = models.Cat_Topic_Comment(
-		# 	user = form.cleaned_data['user'],
-		# 	cat_topic = form.cleaned_data['cat_topic'],
-		# 	comment = form.cleaned_data['comment'],
-		# 	comment_picture_path = form.cleaned_data['comment_picture_path']
-		# )
+		new_book_data = models.BookData(
+			user = form.cleaned_data['user'],
+			CSVName = unique_name,
+			upload = csv_file
+		)
 
-		# new_comment.save()
+		new_book_data.save()
 		if id_is_unique:
 			return super(UploadBookDataView, self).form_valid(form)
 		else:
