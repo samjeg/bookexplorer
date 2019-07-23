@@ -10,6 +10,7 @@ import requests
 import uuid
 from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponseForbidden
 from django.views.generic import (
 									TemplateView, 
 									DetailView,
@@ -43,6 +44,7 @@ class BookTableView(DetailView):
 		context = super(BookTableView, self).get_context_data(**kwargs)
 		user = self.request.user
 		book_obj = self.get_object()
+		
 		if user.is_authenticated:
 			context['file_name'] = book_obj.upload.name
 			book_data = self.readBookCSV(book_obj.upload)
@@ -53,6 +55,7 @@ class BookTableView(DetailView):
 	def readBookCSV(self, csv_file):
 		books = []
 		books_reader = csv.reader(csv_file, delimiter=str(u',').encode('utf-8'), quotechar=str(u'|').encode('utf-8'))
+		
 		for row in books_reader:
 			book = {
 				"book_title": row[0], 
@@ -94,28 +97,27 @@ class UploadBookDataView(FormView):
 		print("Context data")
 		if user.is_authenticated:
 			form.initial['user'] = user.id
-			print("User is_authenticated: %s"%user.id)
-			if form.is_valid():
-				print("User: %s"%user.id)
-				if not self.id_is_unique:
-					context["id_is_not_unique"] = True
-					
+			print("User: %s"%user.id)					
 			context['book_form'] = form
 		return context
 
 	def post(self, request, *args, **kwargs):
+		print("hello post")
 		if not request.user.is_authenticated:
 			return HttpResponseForbidden()
 		form = self.get_form()
 		if form.is_valid():
+			print("hello form valid")
 			return self.form_valid(form)
 		else:
-			return self.form_invalid(form)
+			print("Hello invalid form")
+			return super(UploadBookDataView, self).form_invalid(form)
 
 	def form_valid(self, form):
 		id_is_unique = True
 		book_form = form
 		unique_name = "no_name"
+		print("in form valid")
 		if book_form.is_valid():
 			print("Book form valid")
 			self.id_is_unique = book_form.id_is_unique
