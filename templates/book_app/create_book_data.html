@@ -1,23 +1,33 @@
 {% extends "book_app/base.html" %}
 {% load static %}
 {% block title %}Book Data Form{% endblock %}
-{% block templatecss %}<link href="{% static 'css/creat_book_data.css' %}" rel="stylesheet" />{% endblock %}
+{% block templatecss %}<link href="{% static 'css/create_book_data.css' %}" rel="stylesheet" />{% endblock %}
 {% if user.is_authenticated %}
 {% endif %}
 
 {% block content %}
+	
     <br>
     <form enctype="multipart/form-data" method="POST">
       {% csrf_token %}
       <div class="register-container">
-        {{ book_form.as_p }}
+        <p>{{ form.upload.label }}: {{ form.upload}}</p>
         <button name="book_submit_btn" type="submit" class="btn btn-primary btn-btn">Submit</button>
       </div>
     </form>
-    {% if id_is_not_unique %}
- 		<div class="error_message">
- 			<h3>The book_id field in the csv file must be unique</h3>
- 		</div>
-    {% endif %}
     <br>
+    <ul>
+        {% for error in form.upload.errors %}
+            <li class="alert alert-danger error_message">{{ error }}</li>    
+        {% endfor %}
+    </ul>
+    <!-- {% if not form.errors %}
+    	{% for field in form %}
+        	{% for error in field.errors %}
+            	<div class="error_message">
+            		{{ error|escape }}Hello
+            	</div>
+        	{% endfor %}
+    	{% endfor %}
+    {% endif %} -->
 {% endblock %}

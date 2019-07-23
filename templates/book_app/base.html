@@ -31,6 +31,9 @@
             <a name="home_nav" class="nav-link" href="{% url 'index' %}">HomePage</a>
           </li>
           {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a name="csv_list_nav" class="nav-link" href="{% url 'book_app:csv_list' %}">Book List</a>
+            </li>
            <li class="nav-item">
             <a name="logout_nav" class="nav-link" href="{% url 'book_app:logout' %}">Logout</a>
             </li>

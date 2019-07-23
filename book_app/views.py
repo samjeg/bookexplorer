@@ -87,23 +87,25 @@ class UploadBookDataView(FormView):
 	def get_success_url(self):
 		return reverse_lazy('book_app:book_table', kwargs={'pk': self.object.pk})
 
-
 	def get_context_data(self, **kwargs):
 		context = super(UploadBookDataView, self).get_context_data(**kwargs)
 		user = self.request.user
 		form = self.get_form()
+		print("Context data")
 		if user.is_authenticated:
+			form.initial['user'] = user.id
+			print("User is_authenticated: %s"%user.id)
 			if form.is_valid():
+				print("User: %s"%user.id)
 				if not self.id_is_unique:
 					context["id_is_not_unique"] = True
-			form.initial['user'] = user.id
+					
 			context['book_form'] = form
 		return context
 
 	def post(self, request, *args, **kwargs):
 		if not request.user.is_authenticated:
 			return HttpResponseForbidden()
-		# self.object = self.get_object()
 		form = self.get_form()
 		if form.is_valid():
 			return self.form_valid(form)
@@ -112,12 +114,12 @@ class UploadBookDataView(FormView):
 
 	def form_valid(self, form):
 		id_is_unique = True
-		book_form = self.get_form()
+		book_form = form
 		unique_name = "no_name"
 		if book_form.is_valid():
+			print("Book form valid")
+			self.id_is_unique = book_form.id_is_unique
 			csv_file = book_form.cleaned_data.get('upload')
-			csv_file2 = book_form.cleaned_data.get('upload')
-			id_is_unique = self.validate_book_id(csv_file, csv_file2)
 			new_uuid = uuid.uuid4().hex
 			uuid_reduced = new_uuid[:8]
 			str_len = len(csv_file.name)
@@ -126,8 +128,7 @@ class UploadBookDataView(FormView):
 			unique_name = '%s%s%s'%(file_name, uuid_reduced, ".csv")
 
 			csv_file.name = unique_name
-			bucket_url =  'https://%s.s3.%s.amazonaws.com/%s/'%(settings.AWS_STORAGE_BUCKET_NAME, settings.AWS_REGION_HOST, unique_name)
-					
+			bucket_url =  'https://%s.s3.%s.amazonaws.com/%s/'%(settings.AWS_STORAGE_BUCKET_NAME, settings.AWS_REGION_HOST, unique_name)	
 		
 		print("ID Validation %s"%(id_is_unique))			
 		
@@ -145,33 +146,7 @@ class UploadBookDataView(FormView):
 		else:
 			return super(UploadBookDataView, self).form_invalid(form)
 
-	def validate_book_id(self, csv_file, csv_file2):
-		counter1 = 0
-		id_is_unique = True
-		self.id_is_unique = True
-		if csv_file:
-			books_reader = csv.reader(csv_file, delimiter=str(u',').encode('utf-8'), quotechar=str(u'|').encode('utf-8'))
-			
-			if books_reader:
-				for row1 in books_reader:
-					counter1 = counter1 + 1
-					print("counter1: %s"%counter1)
-					# print("Row1: %s %s"%(row1[0], row1[3]))
-					if csv_file2:
-						books_reader2 = csv.reader(csv_file2, delimiter=str(u',').encode('utf-8'), quotechar=str(u'|').encode('utf-8'))
-						counter2 = 0
-						for row2 in books_reader2:
-							counter2 = counter2 + 1
-							print("counter2: %s"%counter2)
-							if counter1 != counter2:
-								print("Row1 %s Row2 %s"%(row1[3], row2[3]))
-								if row1[3] == row2[3]:
-									id_is_unique = False
-									self.id_is_unique = False
-									return id_is_unique
-					
-			
-		return id_is_unique
+	
 
 
 
