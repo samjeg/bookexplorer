@@ -6,14 +6,13 @@
 {% endif %}
 
 {% block content %}
-	
     <br>
     <form enctype="multipart/form-data" method="POST">
-      {% csrf_token %}
-      <div class="register-container">
-        <p>{{ form.upload.label }}: {{ form.upload}}</p>
-        <button name="book_submit_btn" type="submit" class="btn btn-primary btn-btn">Submit</button>
-      </div>
+        {% csrf_token %}
+        <div class="register-container">
+            <p>{{ form.upload.label }}: {{ form.upload}}</p>
+            <button name="book_submit_btn" type="submit" class="btn btn-primary btn-btn">Submit</button>
+        </div>
     </form>
     <br>
     <ul>
@@ -21,13 +20,4 @@
             <li class="alert alert-danger error_message">{{ error }}</li>    
         {% endfor %}
     </ul>
-    <!-- {% if not form.errors %}
-    	{% for field in form %}
-        	{% for error in field.errors %}
-            	<div class="error_message">
-            		{{ error|escape }}Hello
-            	</div>
-        	{% endfor %}
-    	{% endfor %}
-    {% endif %} -->
 {% endblock %}
