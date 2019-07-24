@@ -28,7 +28,7 @@ class UserCreateForm(UserCreationForm):
 
 class BookDataForm(forms.ModelForm):
 	user = forms.ModelChoiceField(widget = forms.HiddenInput(), queryset=User.objects.all())
-	upload = forms.FileField()
+	upload = forms.FileField(widget=forms.FileInput(attrs={'accept': ".csv"}))
 	id_is_unique = True
 
 	def clean_upload(self):
@@ -70,10 +70,29 @@ class BookDataForm(forms.ModelForm):
 								if row1[3] == row2[3]:
 									self.id_is_unique = False
 									raise forms.ValidationError("CSV file does not have a unique id's")
-		# print("Hello clean upload")
-	
-		return csv_file	
 		
+		# csv file size max 3KB
+		if csv_file.size > 3000:
+			raise forms.ValidationError("CSV file is too large")
+		
+		# csv colomn
+		row_counter = 0
+		if csv_file:
+			col_books_reader = csv.reader(csv_file, delimiter=str(u',').encode('utf-8'), quotechar=str(u'|').encode('utf-8'))
+			# print("Hello csv file")
+
+			if col_books_reader:
+
+				for book_row in col_books_reader:
+					col_amount = len(book_row)
+					print("Coloumn amount %s"%col_amount)
+
+					if col_amount > 5 or col_amount < 5:
+						raise forms.ValidationError("Wrong number of columns in csv file")				
+	
+		return csv_file
+
+				
 
 	class Meta:
 		fields = ("user", "upload")

@@ -11,8 +11,6 @@
         {% csrf_token %}
         <div class="register-container">
             <p>{{ book_form.as_p }}</p>
-            <!-- <label for="{{ book_form.upload.label }}">{{ book_form.upload.label }}</label> -->
-            <!-- <p name="{{ book_form.upload.label }}">{{ book_form.upload }}</p> -->
             <button name="book_submit_btn" type="submit" class="btn btn-primary btn-btn">Submit</button>
         </div>
     </form>
