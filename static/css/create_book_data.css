@@ -20,6 +20,11 @@
 	list-style: none;
 }
 
+ul.errorlist {
+	display:none;
+}
+
+
 @media only screen and (max-width: 600px) {
 	.imageframe {
 		height: 8vw;
