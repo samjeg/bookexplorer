@@ -47,4 +47,10 @@ table {
 		width: 70vw;
 	}
 
+	table {
+		width: 50vw;
+		margin-left: 5vw;
+		margin-top: 5vh;
+	}
+
 }

@@ -46,6 +46,7 @@ class BookTableView(DetailView):
 		book_obj = self.get_object()
 		
 		if user.is_authenticated:
+			# get file name for title with uuid for uniqueness
 			context['file_name'] = book_obj.upload.name
 			book_data = self.readBookCSV(book_obj.upload)
 			context['book_data'] = book_data
@@ -57,6 +58,8 @@ class BookTableView(DetailView):
 		books_reader = csv.reader(csv_file, delimiter=str(u',').encode('utf-8'), quotechar=str(u'|').encode('utf-8'))
 		
 		for row in books_reader:
+
+			# book dict the data can be easily manipulated and put into a table
 			book = {
 				"book_title": row[0], 
 				"book_author": row[1], 
@@ -94,34 +97,33 @@ class UploadBookDataView(FormView):
 		context = super(UploadBookDataView, self).get_context_data(**kwargs)
 		user = self.request.user
 		form = self.get_form()
-		print("Context data")
+		
 		if user.is_authenticated:
-			form.initial['user'] = user.id
-			print("User: %s"%user.id)					
+			form.initial['user'] = user.id					
 			context['book_form'] = form
 		return context
 
 	def post(self, request, *args, **kwargs):
-		print("hello post")
+		
 		if not request.user.is_authenticated:
 			return HttpResponseForbidden()
+
 		form = self.get_form()
+		
 		if form.is_valid():
-			print("hello form valid")
 			return self.form_valid(form)
 		else:
-			print("Hello invalid form")
 			return super(UploadBookDataView, self).form_invalid(form)
 
 	def form_valid(self, form):
 		id_is_unique = True
 		book_form = form
 		unique_name = "no_name"
-		print("in form valid")
+		
 		if book_form.is_valid():
-			print("Book form valid")
-			self.id_is_unique = book_form.id_is_unique
 			csv_file = book_form.cleaned_data.get('upload')
+
+			# gen unique name using uuid
 			new_uuid = uuid.uuid4().hex
 			uuid_reduced = new_uuid[:8]
 			str_len = len(csv_file.name)
@@ -130,9 +132,10 @@ class UploadBookDataView(FormView):
 			unique_name = '%s%s%s'%(file_name, uuid_reduced, ".csv")
 
 			csv_file.name = unique_name
+
+			# create bucket url
 			bucket_url =  'https://%s.s3.%s.amazonaws.com/%s/'%(settings.AWS_STORAGE_BUCKET_NAME, settings.AWS_REGION_HOST, unique_name)	
-		
-		print("ID Validation %s"%(id_is_unique))			
+				
 		
 		new_book_data = models.BookData(
 			user = form.cleaned_data['user'],
