@@ -22,6 +22,15 @@
 	<li>Book ID</li>
 	<li>Publisher</li>
 </ol>
+<p>Each row of the csv needs to be in the following format:</p>
+<br>
+<ol>
+	<li>Title: String format</li>
+	<li>Author: String format</li>
+	<li>Published: Date format, dd/mm/yyyy</li>
+	<li>ID: Integer format, needs to be unique for every entry</li>
+	<li>Publisher: String format</li>
+</ol>
 <br>
 <p>If any of the book ids in the csv file is not unique then the upload will be stopped before it reaches the backend</p>
 <br>
