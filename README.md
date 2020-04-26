@@ -1,6 +1,5 @@
 <br>
 <h3>Installation -</h3> 
-<br>
 <ul>
 	<li>python==2.7</li>
 	<li>django==1.11.20</li>
@@ -14,7 +13,6 @@
 <p>A web application that allows the user to upload a csv files contining books</p>
 <br>
 <p>Books coloumns must be in this order</p>
-<br>
 <ol>
 	<li>Book Title</li>
 	<li>Book Author</li>
@@ -23,7 +21,6 @@
 	<li>Publisher</li>
 </ol>
 <p>Each row of the csv needs to be in the following format:</p>
-<br>
 <ol>
 	<li>Title: String format</li>
 	<li>Author: String format</li>
