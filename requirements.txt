@@ -1,5 +1,5 @@
 python==2.7
-django==1.11.20
+django==2.2.24
 pillow
 django-storages
 boto3
